@@ -1,3 +1,9 @@
+//! # local_timestamps
+//!
+//! `local_timestamps` is a collection of utilities to make performing timestamp
+//! calculations more convenient.
+
+
 /// Examples
 /// lts_now() -> returns an i64 of number of seconds from 1970 (no leap seconds) 
 /// but as a local time pretending to be UTC  
