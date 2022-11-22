@@ -7,7 +7,7 @@ license = "MIT OR Apache-2.0"
 description = "operations on local timestamps"
 repository = "https://github.com/svencp/local_timestamps.git"
 keywords = ["timestamps"]
-categories = ["timestamps"]
+categories = ["date-and-time"]
 
 
 
