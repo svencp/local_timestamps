@@ -1,33 +1,70 @@
 /// Examples
+/// lts_now() -> returns an i64 of number of seconds from 1970 (no leap seconds) 
+/// but as a local time pretending to be UTC  
 /// 
-/// 
-/// 
-/// 
-/// 
-/// 
-/// 
-/// 
+///     #[allow(deprecated)]
+/// #[test]
+/// fn t001_lts1() {
+///     let date_str = "2000-01-01";
+///     let ts = lts_date_string_to_timestamp(date_str);
+///     let date_time_str =  lts_to_date_time_string(ts.unwrap());
+///     assert_eq!(date_time_str,"2000-01-01 00:00:00");
 
+///     let now = Utc::now().timestamp();
+///     let offset = Local.timestamp(now, 0).offset().fix().local_minus_utc() as i64; 
+///     let utc_adjusted = now + offset;
+///     let utc_adjusted_str = lts_to_date_time_string(utc_adjusted);
+///     let new_now = lts_now();
+///     let new_now_str = lts_to_date_time_string(new_now);
+///     assert_eq!(new_now_str,utc_adjusted_str);
 
+///     let date_str2 = "2000-01-01";
+///     let ts2 = lts_date_string_to_timestamp(date_str2);
+///     let date_time_str2 =  lts_to_date_string(ts2.unwrap());
+///     assert_eq!(date_time_str2,"2000-01-01");
+///     assert_eq!(1,1);
+/// }
 
+/// #[allow(deprecated)]
+/// #[test]
+/// fn t002_recur_term() {
+///     let date_str = "2000-01-01";
+///     let term = "+3m";
+///     let ts = lts_date_string_to_timestamp(date_str);
+///     let res = lts_add_timestamp_to_recur_term(ts.unwrap(),term);
+///     let res_time = lts_to_date_time_string(res.unwrap());
+///     assert_eq!(res_time,"2000-04-01 00:00:00".to_string());
 
+///     let date_str2 = "2000-01-01";
+///     let term2 = "+17d";
+///     let ts2 = lts_date_string_to_timestamp(date_str2);
+///     let res2 = lts_add_timestamp_to_recur_term(ts2.unwrap(),term2);
+///     let res_time2 = lts_to_date_time_string(res2.unwrap());
+///     assert_eq!(res_time2,"2000-01-18 00:00:00".to_string());
 
+///     let date_str3 = "2000-01-01";
+///     let term3 = "+6w";
+///     let ts3 = lts_date_string_to_timestamp(date_str3);
+///     let res3 = lts_add_timestamp_to_recur_term(ts3.unwrap(),term3);
+///     let res_time3 = lts_to_date_time_string(res3.unwrap());
+///     assert_eq!(res_time3,"2000-02-12 00:00:00".to_string());
 
-
-
-
-/*
-    My attempt at a local timestamp
-    2022-11-21      svencp
-*/
-
+///     let date_str = "2000-01-27";
+///     let term = "+17y";
+///     let ts = lts_date_string_to_timestamp(date_str);
+///     let res = lts_add_timestamp_to_recur_term(ts.unwrap(),term);
+///     let res_time = lts_to_date_time_string(res.unwrap());
+///     assert_eq!(res_time,"2017-01-27 00:00:00".to_string());
+    
+///     let now_utc = Utc::now().timestamp();
+///     let offset = Local.timestamp(now_utc, 0).offset().fix().local_minus_utc() as i64;
+///     let add = now_utc + offset;
+///     assert_eq!(add,lts_now());
+/// }
 
 
 use chrono::*;
 use chronoutil::*;
-
-
-
 
 pub const DATE_FORMAT: &str      = "%Y-%m-%d";
 pub const DATE_TIME_FORMAT: &str = "%Y-%m-%d %H:%M:%S";
@@ -36,18 +73,10 @@ pub const WEEK_SECS: i64         = 604800;
 
 
 
-
-
-
-
-
-
-
-
-
 // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ Functions @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@           @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
+#[allow(deprecated)]
 // a function that returns the utc timestamp as a local timestamp;
 pub fn lts_now() -> i64 {
     let ts = Local::now().timestamp();
@@ -57,6 +86,7 @@ pub fn lts_now() -> i64 {
     return ret;
 }
 
+#[allow(deprecated)]
 // a function that takes a lts timestamp and converts it to a date string
 pub fn lts_to_date_string(ts: i64) -> String {
     let ndt = NaiveDateTime::from_timestamp(ts, 0);
@@ -64,6 +94,7 @@ pub fn lts_to_date_string(ts: i64) -> String {
     return ret;
 }
 
+#[allow(deprecated)]
 // a function that takes a lts timestamp and converts it to a date and time string
 pub fn lts_to_date_time_string(ts: i64) -> String {
     let ndt = NaiveDateTime::from_timestamp(ts, 0);
@@ -71,7 +102,7 @@ pub fn lts_to_date_time_string(ts: i64) -> String {
     return ret;
 }
 
-
+#[allow(deprecated)]
 // a function that takes a date string and converts it to a timestamp (dont do local here)
 pub fn lts_date_string_to_timestamp(date_str: &str) ->  Result<i64, &'static str> {
     let nd = NaiveDate::parse_from_str(date_str, DATE_FORMAT);
@@ -79,7 +110,6 @@ pub fn lts_date_string_to_timestamp(date_str: &str) ->  Result<i64, &'static str
         return Err("NaiveDate parse error");
     }
     let ndt = nd.unwrap().and_hms(0, 0, 0);
-    // let local_ts = lts_timestamp_to_local_timestamp(ndt.timestamp());
     return Ok(ndt.timestamp());
 }
 
@@ -89,7 +119,6 @@ pub fn lts_date_time_string_to_timestamp(date_time_str: &str) ->  Result<i64, &'
     if ndt.is_err() {
         return Err("NaiveDateTime parse error");
     }
-    // let local_ts = lts_timestamp_to_local_timestamp(ndt.unwrap().timestamp());
     return Ok(ndt.unwrap().timestamp());
 }
 
@@ -102,6 +131,7 @@ pub fn lts_from_str64_to_timestamp(str_64: &str) -> Result<i64, &'static str> {
     return Ok(res.unwrap());
 }
 
+#[allow(deprecated)]
 // function to add a timestamp to recur_term
 pub fn lts_add_timestamp_to_recur_term(ts: i64, term: &str) -> Result<i64, &'static str> {
     if ! term.starts_with("+") {
@@ -177,6 +207,7 @@ mod tests {
 
     
     // #[ignore]
+    #[allow(deprecated)]
     #[test]
     fn t001_lts1() {
         let date_str = "2000-01-01";
@@ -200,6 +231,7 @@ mod tests {
     }
 
     // #[ignore]
+    #[allow(deprecated)]
     #[test]
     fn t002_recur_term() {
         let date_str = "2000-01-01";
@@ -236,22 +268,6 @@ mod tests {
         let add = now_utc + offset;
         assert_eq!(add,lts_now());
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 } //end of tests
