@@ -2,12 +2,9 @@
 name = "local_timestamps"
 version = "0.1.0"
 edition = "2021"
-# name = "draw_box"
-# version = "0.2.1"
-# edition = "2021"
 authors = ["Sven Ponelat"]
-# license = "MIT"
-description = "Names for box drawing elements."
+license = "GPL-2.0 license "
+description = "operations on local timestamps"
 repository = "https://github.com/svencp/local_timestamps.git"
 keywords = ["timestamps","unix timestamps"]
 categories = ["timestamps"]
