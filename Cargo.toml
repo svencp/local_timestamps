@@ -6,7 +6,7 @@ authors = ["Sven Ponelat"]
 license = "GPL-2.0 license "
 description = "operations on local timestamps"
 repository = "https://github.com/svencp/local_timestamps.git"
-keywords = ["timestamps","unix timestamps"]
+keywords = ["timestamps"]
 categories = ["timestamps"]
 
 
