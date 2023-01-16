@@ -6,11 +6,16 @@
 
 /*
     A timestamp utility library for pretending that local timestamps are UTC
+
+    2023.01.16      Added a function to get the first of the month as a timestamp
+
+
 */
 
 
 use chrono::*;
 use chronoutil::*;
+
 
 pub const DATE_FORMAT: &str      = "%Y-%m-%d";
 pub const DATE_TIME_FORMAT: &str = "%Y-%m-%d %H:%M:%S";
@@ -142,6 +147,18 @@ pub fn lts_add_timestamp_to_recur_term(ts: i64, term: &str) -> Result<i64, &'sta
 
 } // end of function
 
+#[allow(deprecated)]
+// Get the first of the month as a timestamp from a timestamp
+pub fn lts_get_first_of_month_timestamp(ts: i64) -> i64 {
+
+    let datetime = Utc.timestamp(ts, 0);
+    let start_of_month = NaiveDate::from_ymd(datetime.year(), datetime.month(), 1).and_hms(0, 0, 0);
+    let unix_timestamp = start_of_month.timestamp();
+
+    return unix_timestamp;
+}
+
+
 
 
 // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@  Tests  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -214,6 +231,37 @@ mod tests {
         let add = now_utc + offset;
         assert_eq!(add,lts_now());
     }
+
+
+    // #[ignore]
+    #[allow(deprecated)]
+    #[test]
+    fn t003_first_month() {
+
+        let current: i64 = 1673878251;        // Mon Jan 16 2023 14:10:51 GMT+0000
+        let first   = lts_get_first_of_month_timestamp(current);
+        let ans     = 1672531200;        // Sun Jan 01 2023 00:00:00 GMT+0000
+
+        assert_eq!(first,ans);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 } //end of tests
