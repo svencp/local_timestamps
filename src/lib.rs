@@ -18,6 +18,7 @@ use chronoutil::*;
 
 
 pub const DATE_FORMAT: &str      = "%Y-%m-%d";
+pub const TIME_FORMAT: &str      = "%H:%M:%S";
 pub const DATE_TIME_FORMAT: &str = "%Y-%m-%d %H:%M:%S";
 pub const DAY_SECS: i64          = 86400;
 pub const WEEK_SECS: i64         = 604800;
@@ -81,6 +82,15 @@ pub fn lts_from_str64_to_timestamp(str_64: &str) -> Result<i64, &'static str> {
     }
     return Ok(res.unwrap());
 }
+
+#[allow(deprecated)]
+// a function that takes a lts timestamp and converts it to a time string
+pub fn lts_to_time_string(ts: i64) -> String {
+    let ndt = NaiveDateTime::from_timestamp(ts, 0);
+    let ret = ndt.format(TIME_FORMAT).to_string();
+    return ret;
+}
+
 
 #[allow(deprecated)]
 // function to add a timestamp to recur_term
@@ -191,6 +201,12 @@ mod tests {
         let date_time_str2 =  lts_to_date_string(ts2.unwrap());
         assert_eq!(date_time_str2,"2000-01-01");
         assert_eq!(1,1);
+
+        let date_time_str7 = "2000-01-01 23:09:17";
+        let ts3 = lts_date_time_string_to_timestamp(date_time_str7);
+        let s17 = lts_to_time_string(ts3.unwrap());
+        assert_eq!(s17,"23:09:17");
+
     }
 
     // #[ignore]
